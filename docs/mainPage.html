@@ -1,26 +1,143 @@
-<div class='header'>
+<div ng-controller='PlaygroundController'>
+
+<header id='top' class='navbar navbar-default' role='navigation'>
 	<div class='container'>
-		<h1>pdfmake</h1>
-		<p>Client/server side PDF printing in pure JavaScript</p>
-		<h4 class='subtitle banner'><small>client-version</small> bower install pdfmake </h4>
-		<h4 class='banner'><small>server-version</small> npm install pdfmake</h4>
+		<div class='navbar-header'>
+		<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+			<span class='sr-only'>Toggle navigation</span>
+			<span class='icon-bar'></span>
+			<span class='icon-bar'></span>
+			<span class='icon-bar'></span>
+		</button>
+		<a class='navbar-brand' href='#'>pdf<span style='font-weight: 600'>make</span>&nbsp;playground</a>
+		</div>
+		<nav class='navbar-collapse collapse' role='navigation' style='height: 1px;'>
+			<ul class='nav navbar-nav navbar-right'>
+				<li><a href='#/features'>Features</a></li>
+				<li><a href='#/gettingstarted'>Getting started (docs)</a></li>
+				<li><a href='#'>Playground</a></li>
+				<li><a href='https://github.com/blucky/pdfmake'>Sources</a></li>
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<div class='playground'>
+	<div class='container'>
+		<span id='stats'>{{stats}}</span>
+
+		<ul id='printThis'>
+			<li ng-click='openPdf()'>open</li>
+			<li ng-click='print()'>print</li>
+			<li ng-click='download()'>download</li>
+		</ul>
+
+		<ul id='exampleList'>
+			<li ng-repeat='e in examples' ng-click='e.activate()'>{{e.name}}</li>
+		</ul>
 	</div>
 </div>
-<div class='container page keyDescription'>
-	<div class='row '>
-		<div class='col-lg-4'>
-			<h2>In-browser</h2>
-			Print PDFs directly in the browser or delegate it to your NodeJS backend.
-			Use the same document definition in both cases.
-		</div>
-		<div class='col-lg-4'>
-			<h2>Fully declarative</h2>
-			Forget about manual x, y calculations. Declare document structure and let pdfmake do the rest.
-		</div>
-		<div class='col-lg-4'>
-			<h2>Powerful layout engine</h2>
-			Use paragraphs, columns, lists, tables, canvas, etc... Declare your own styles,
-			use custom fonts, build a DSL and extend the framework.
+
+<div class='playgroundBody'>
+	<div class='notEnoughSpace'>
+		<div class='container'>
+			<h1>Playground does not make too much sense when horizontal resolution is below 300px</h1>
 		</div>
 	</div>
+	<div class='content'>
+		<div id='editor'></div>
+		<iframe id='pdfV'></iframe>
+
+	</div>
+</div>
+
+
+<script type="text/javascript" charset="utf-8">
+	function PlaygroundController($scope, $http) {
+		$scope.examples = [];
+
+		var editor = ace.edit('editor');
+		setupEditor(editor);
+		var names = ['basics', 'styles1', 'styles2', 'styles3', 'columns', 'tables', 'lists', 'margin', 'images' ];
+
+		var i = 0;
+		['basics', 'named-styles', 'inline-styling', 'style-overrides', 'columns', 'tables', 'lists', 'margins', 'images'].forEach(function(example) {
+			$scope.examples.push({
+				name: names[i++],
+				activate: function() {
+					$http.get('samples/' + example).success(function(data) {
+						editor.getSession().setValue('// playground requires you to assign document definition to a variable called dd\n\nvar dd = {\n' + data.replace(/(\r?)\n/g, '\n').replace(/(^)/gm, '\t') + '\n}');
+					});
+				}
+			});
+		});
+
+		var old = localStorage.pdfMakeDD;
+
+		if (!old) {
+			$scope.examples[0].activate();
+		} else {
+			editor.getSession().setValue(old);
+		}
+
+		var timer;
+
+		function setupEditor() {
+			var lastGen, lastChanged;
+
+			editor.setTheme('ace/theme/monokai');
+			editor.getSession().setMode('ace/mode/javascript');
+
+			editor.getSession().on('change', function(e) {
+				if (timer) {
+					clearTimeout(timer);
+				}
+				lastChanged = new Date();
+
+				localStorage.pdfMakeDD = editor.getSession().getValue();
+
+				timer = setTimeout(function() {
+					if (!lastGen || lastGen < lastChanged) {
+						generate();
+					};
+				}, 300);
+			});
+
+			function generate() {
+				lastGen = new Date();
+
+				eval(editor.getSession().getValue());
+
+				pdfMake.createPdf(dd).getDataUrl(function(outDoc) {
+					$scope.$apply(function() {
+						$scope.stats = 'generated in ' + (new Date().getTime() - lastGen.getTime()) + ' ms';
+					});
+
+					document.getElementById('pdfV').src = outDoc;
+
+				});
+			}
+
+			$scope.print = function() {
+				eval(editor.getSession().getValue());
+				pdfMake.createPdf(dd).print();
+			};
+
+			$scope.openPdf = function() {
+				eval(editor.getSession().getValue());
+				pdfMake.createPdf(dd).open();
+			};
+
+			$scope.download = function() {
+				eval(editor.getSession().getValue());
+				pdfMake.createPdf(dd).download('sample.pdf');
+			};
+		}
+	};
+</script>
+
+<script src='build/pdfmake.min.js'></script>
+<script src='build/vfs_fonts.js'></script>
+<script src='ace-builds/src-min/ace.js'></script>
+
 </div>
