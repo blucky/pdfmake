@@ -1,54 +1,5 @@
 <div class='container subpage'>
 <!-- 	<h1>Getting started</h1> -->
-	<h1>Install</h1>
-	<div ng-hide='showNodeVersion'>
-		<p>
-			This document will walk you through the basics of pdfmake and will show you how to create PDF files in the browser. If you're interested in server-side printing check the examples folder.
-		</p>
-		<p>
-			To begin with the default configuration, you should include two files:
-			<ul>
-				<li><a href='https://raw.githubusercontent.com/bpampuch/pdfmake/master/build/pdfmake.min.js' download><strong>pdfmake.min.js</strong></a></li>
-				<li><a href='https://raw.githubusercontent.com/bpampuch/pdfmake/master/build/vfs_fonts.js' download><strong>vfs_fonts.js</strong></a> - default font definition (it contains Roboto, you can however <a href='https://github.com/bpampuch/pdfmake/wiki/Custom-Fonts---client-side'>use custom fonts instead</a>)</li>
-			</ul>
-		</p>
-		<pre class='code'>
- &lt;!doctype html&gt;
- &lt;html lang='en'&gt;
- &lt;head&gt;
- 	&lt;meta charset='utf-8'&gt;
- 	&lt;title&gt;my first pdfmake example&lt;/title&gt;
- 	&lt;script src='build/pdfmake.min.js'&gt;&lt;/script&gt;
- 	&lt;script src='build/vfs_fonts.js'&gt;&lt;/script&gt;
- &lt;/head&gt;
- &lt;body&gt;
- (...)</pre>
-
-		<p>
-			You can download both files from <a href='https://github.com/bpampuch/pdfmake/tree/master/build'>github</a> or with bower:
-			<pre class='code'> bower install pdfmake</pre>
-		</p>
-
-		<p>In the latter case you'll find the files under <strong>bower_components/pdfmake/build/</strong></p>
-	</div>
-
-	<div ng-show='showNodeVersion'>
-		<strong>This is just a placeholder for the NodeJS GettingStarted (<a ng-click='showNodeVersion = false'>switch back to browser-based version</a>).</strong>
-		<br/><br/>
-		<strong>If you can't wait to start using server-side pdfmake, read the <a href='https://github.com/bpampuch/pdfmake/tree/master/examples'>examples</a></strong>
-		<br/><br/>
-
-		This document will walk you through the basics of pdfmake and will show you how to create PDF files under NodeJS (<a ng-click='showNodeVersion = false'>switch back to browser-based version</a>)
-		<br/><br/>
-		1. Install <strong>pdfmake</strong> with npm:
-		<pre class='code'> npm install pdfmake</pre>
-		<br/>
-		2. Create fonts directory and copy TTF fonts you'd like to use
-		TODO
-		<br/><br/>
-		3. TODO
-	</div>
-
 	<h1>Document definition object</h1>
 	<p>
 		<strong>pdfmake</strong> follows a declarative approach.
