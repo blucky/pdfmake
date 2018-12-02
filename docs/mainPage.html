@@ -79,6 +79,15 @@
 					};
 				}, 300);
 			});
+			
+			pdfMake.fonts = {
+				SourceHanSerifJP: {
+					normal: 'SourceHanSerifJP-Medium.otf'
+				},
+				mgenplus: {
+					normal: 'mgenplus-1pp-medium.ttf'
+				}
+			};
 
 			function generate() {
 				lastGen = new Date();
