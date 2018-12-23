@@ -1,9 +1,6 @@
 var gulp = require('gulp');
+const $ = require('gulp-load-plugins')();
 var webpack = require('webpack');
-var mocha = require('gulp-spawn-mocha');
-var eslint = require('gulp-eslint');
-var each = require('gulp-each');
-var fc2json = require('gulp-file-contents-to-json');
 var log = require('fancy-log');
 var PluginError = require('plugin-error');
 
@@ -35,7 +32,7 @@ gulp.task('buildWithStandardFonts', function (callback) {
 
 gulp.task('test', function () {
 	return gulp.src(['./tests/**/*.js'])
-		.pipe(mocha({
+		.pipe($.spawnMocha({
 			debugBrk: DEBUG,
 			R: CI ? 'spec' : 'nyan'
 		}));
@@ -43,28 +40,23 @@ gulp.task('test', function () {
 
 gulp.task('lint', function () {
 	return gulp.src(['./src/**/*.js'])
-		.pipe(eslint())
-		.pipe(eslint.format())
-		.pipe(eslint.failAfterError());
+		.pipe($.eslint())
+		.pipe($.eslint.format())
+		.pipe($.eslint.failAfterError());
 });
 
 gulp.task('buildFonts', function () {
 	return gulp.src(['./examples/fonts/*.*'])
-		.pipe(each(function (content, file, callback) {
+		.pipe($.each(function (content, file, callback) {
 			var newContent = new Buffer(content).toString('base64');
 			callback(null, newContent);
 		}, 'buffer'))
-		.pipe(fc2json('vfs_fonts.js', {flat: true}))
-		.pipe(each(function (content, file, callback) {
+		.pipe($.fileContentsToJson('vfs_fonts.js', {flat: true}))
+		.pipe($.each(function (content, file, callback) {
 			var newContent = vfsBefore + content + vfsAfter;
 			callback(null, newContent);
 		}, 'buffer'))
 		.pipe(gulp.dest('build'));
-});
-
-gulp.task('watch', function () {
-	gulp.watch('./src/**', ['test', 'build']);
-	gulp.watch('./tests/**', ['test']);
 });
 
 gulp.task('default', gulp.series(/*'lint',*/ 'test', 'build', 'buildFonts'));

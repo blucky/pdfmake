@@ -29,7 +29,7 @@
 </div>
 
 
-<script type="text/javascript" charset="utf-8">
+<script charset="utf-8">
 	function PlaygroundController($scope, $http) {
 		$scope.examples = [];
 
@@ -81,23 +81,17 @@
 			});
 			
 			pdfMake.fonts = {
-				Roboto: {
-					normal:  'SourceHanSerifJP-Medium.otf',
-					bold:    'SourceHanSerifJP-Medium.otf',
-					italics: 'SourceHanSerifJP-Medium.otf',
-					bolditalics:'SourceHanSerifJP-Medium.otf'
+				IPAGothic: {
+					normal:  'ipag.ttf',
+					bold:    'ipag.ttf',
+					italics: 'ipag.ttf',
+					bolditalics:'ipag.ttf'
 				},
-				SourceHanSerifJP: {
-					normal:  'SourceHanSerifJP-Medium.otf',
-					bold:    'SourceHanSerifJP-Medium.otf',
-					italics: 'SourceHanSerifJP-Medium.otf',
-					bolditalics:'SourceHanSerifJP-Medium.otf'
-				},
-				mgenplus: {
-					normal:  'mgenplus-1pp-medium.ttf',
-					bold:    'mgenplus-1pp-medium.ttf',
-					italics: 'mgenplus-1pp-medium.ttf',
-					bolditalics: 'mgenplus-1pp-medium.ttf'
+				IPAMincho: {
+					normal:  'ipam.ttf',
+					bold:    'ipam.ttf',
+					italics: 'ipam.ttf',
+					bolditalics:'ipam.ttf'
 				}
 			};
 
@@ -105,6 +99,11 @@
 				lastGen = new Date();
 
 				eval(editor.getSession().getValue());
+
+				if (!dd['defaultStyle']) {
+					dd['defaultStyle'] = new Object();
+				}
+				dd['defaultStyle']['font'] = 'IPAMincho';
 
 				pdfMake.createPdf(dd).getDataUrl(function(outDoc) {
 					$scope.$apply(function() {
@@ -134,7 +133,4 @@
 	};
 </script>
 
-<script src='build/pdfmake.min.js'></script>
-<script src='build/vfs_fonts.js'></script>
-<script src='ace-builds/src-min/ace.js'></script>
 

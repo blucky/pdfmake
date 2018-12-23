@@ -17,25 +17,28 @@
     "fancy-log": "^1.3.3",
     "file-saver": "^2.0.0",
     "gulp": "^4.0.0",
+    "gulp-connect": "^5.7.0",
     "gulp-each": "^0.5.0",
     "gulp-eslint": "^5.0.0",
     "gulp-file-contents-to-json": "^0.2.2",
+    "gulp-load-plugins": "^1.5.0",
     "gulp-spawn-mocha": "^5.0.1",
     "mocha": "^5.2.0",
     "plugin-error": "^1.0.1",
     "rewire": "^4.0.1",
-    "sinon": "^7.1.1",
+    "sinon": "^7.2.2",
     "string-replace-webpack-plugin": "^0.1.3",
     "transform-loader": "^0.2.4",
-    "webpack": "4.26.1"
+    "webpack": "4.28.0"
   },
   "scripts": {
     "build": "gulp build",
-    "test": "gulp"
+    "test": "gulp",
+    "connect": "gulp connect-live"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/bpampuch/pdfmake.git"
+    "url": "git://github.com/blucky/pdfmake.git"
   },
   "keywords": [
     "pdf",
@@ -43,12 +46,12 @@
     "printing",
     "layout"
   ],
-  "author": "Bartek Pampuch <bartosz.pampuch@gmail.com>",
+  "author": "blucky",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bpampuch/pdfmake/issues"
+    "url": "https://github.com/blucky/pdfmake/issues"
   },
-  "homepage": "http://pdfmake.org",
+  "homepage": "https://blucky.github.io/pdfmake/",
   "config": {
     "blanket": {
       "pattern": "src",
